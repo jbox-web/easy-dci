@@ -7,7 +7,7 @@ module EasyDCI
 
     def initialize(caller)
       @caller  = caller
-      @locals  = nil
+      @locals  = {}
       @success = false
     end
 

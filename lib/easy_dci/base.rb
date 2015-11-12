@@ -33,13 +33,26 @@ module EasyDCI
         dci_options = get_dci_data
         args << dci_options unless dci_options.nil?
 
-        context = dci_context.constantize.new(self)
+        context = find_or_set_dci_context
         context.send(method, *args, &block)
 
         if context.success?
           render_success(opts: render_options, **context.locals)
         else
           render_failure(opts: render_options, **context.locals)
+        end
+      end
+
+
+      def find_or_set_dci_context
+        raise EasyDCI::Error::ContextNotSet if dci_context.nil?
+
+        begin
+          dci_context.constantize
+        rescue NameError => e
+          raise EasyDCI::Error::ContextNotFound, "Class not found: #{dci_context}"
+        else
+          dci_context.constantize.new(self)
         end
       end
 
