@@ -1,4 +1,4 @@
-## Easy DCI
+## EasyDCI
 
 ## Installation
 
