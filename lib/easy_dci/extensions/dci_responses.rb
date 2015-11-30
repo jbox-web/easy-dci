@@ -55,7 +55,7 @@ module EasyDCI
         def render_dci_success(template, locals = {}, opts = {})
           render_js  = opts.delete(:render_js) { false }
           render_txt = opts.delete(:render_txt) { false }
-          layout     = opts.delete(:layout) { User.current.current_theme }
+          layout     = opts.delete(:layout) { current_layout }
 
           respond_to do |format|
             format.html do
@@ -77,7 +77,7 @@ module EasyDCI
 
 
         def render_dci_failure(template, locals = {}, opts = {})
-          layout = opts.delete(:layout) { User.current.current_theme }
+          layout = opts.delete(:layout) { current_layout }
           respond_to do |format|
             format.html { render template, locals: locals, layout: layout }
             format.js   { render ajax_template_path(template), locals: locals }
@@ -111,6 +111,11 @@ module EasyDCI
 
         def get_controller_name
           self.class.name.gsub('Controller', '').underscore
+        end
+
+
+        def current_layout
+          'application'
         end
 
     end
