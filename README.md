@@ -1,5 +1,7 @@
 ## EasyDCI
 
+### A Ruby gem to create DCI Applications, easy ;)
+
 ## Installation
 
 ```ruby
