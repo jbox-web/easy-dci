@@ -4,6 +4,8 @@
 
 ## Installation
 
+Add the following line to your Gemfile :
+
 ```ruby
 gem 'easy-dci', '~> 1.0.0', git: 'https://github.com/jbox-web/easy-dci.git', tag: '1.0.0'
 ```
