@@ -13,11 +13,14 @@ module EasyDCI
 
 
         def set_dci_flash(message, type, errors = [])
-          flash_type = type == :success ? :notice : :alert
           flash[:notice] = []
           flash[:alert]  = []
-          flash[flash_type] << message if do_render_flash_messages?
-          flash[:alert] += errors if do_render_flash_messages? && errors.any?
+          if type == :success
+            flash[:notice] << message if do_render_notice_messages?
+          else
+            flash[:alert] << message if do_render_alert_messages?
+          end
+          flash[:alert] += errors if do_render_alert_messages? && errors.any?
         end
 
 

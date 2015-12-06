@@ -4,8 +4,10 @@ module EasyDCI
       extend ActiveSupport::Concern
 
       included do
-        class_attribute :render_flash_messages
-        self.render_flash_messages = true
+        class_attribute :render_notice_messages
+        class_attribute :render_alert_messages
+        self.render_notice_messages = true
+        self.render_alert_messages = -> (request) { !request.xhr? }
       end
 
 
@@ -33,9 +35,15 @@ module EasyDCI
       private
 
 
-        def do_render_flash_messages?
-          return self.render_flash_messages unless self.render_flash_messages.is_a?(Proc)
-          self.render_flash_messages.call(request)
+        def do_render_notice_messages?
+          return self.render_notice_messages unless self.render_notice_messages.is_a?(Proc)
+          self.render_notice_messages.call(request)
+        end
+
+
+        def do_render_alert_messages?
+          return self.render_alert_messages unless self.render_alert_messages.is_a?(Proc)
+          self.render_alert_messages.call(request)
         end
 
 
