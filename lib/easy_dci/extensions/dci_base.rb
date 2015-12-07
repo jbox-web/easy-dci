@@ -28,6 +28,7 @@ module EasyDCI
 
 
       def destroy
+        set_dci_data(_dci_params_on_destroy)
         call_dci_context(:delete, _crud_object, *_dci_additional_params_on_destroy)
       end
 
@@ -54,6 +55,11 @@ module EasyDCI
 
         def _dci_params_on_update
           _crud_model.params(:on_update)
+        end
+
+
+        def _dci_params_on_destroy
+          nil
         end
 
 
