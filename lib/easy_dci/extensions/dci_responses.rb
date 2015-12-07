@@ -56,21 +56,25 @@ module EasyDCI
 
 
         def render_dci_success(template, locals = {}, opts = {})
-          render_js  = opts.delete(:render_js) { false }
-          render_txt = opts.delete(:render_txt) { false }
-          layout     = opts.delete(:layout) { current_layout }
+          partial = opts.delete(:render_partial) { false }
+          nothing = opts.delete(:render_nothing) { false }
+          layout  = opts.delete(:layout) { current_layout }
 
           respond_to do |format|
             format.html do
-              if render_txt
+              if partial
                 render template, locals: locals, layout: layout
+              elsif nothing
+                render nothing: true
               else
                 redirect_to redirect_url
               end
             end
             format.js do
-              if render_js
+              if partial
                 render ajax_template_path(template), locals: locals
+              elsif nothing
+                render nothing: true
               else
                 render js: "window.location = #{redirect_url.to_json};"
               end
