@@ -12,7 +12,7 @@ module EasyDCI
 
 
       def create
-        set_dci_data(_crud_model.params(:on_create))
+        set_dci_data(_dci_params_on_create)
         if _crud_model.scoped? || _crud_model.polymorphic?
           call_dci_context(:create, _crud_scoped_object, *_dci_additional_params_on_create)
         else
@@ -22,7 +22,7 @@ module EasyDCI
 
 
       def update
-        set_dci_data(_crud_model.params(:on_update))
+        set_dci_data(_dci_params_on_update)
         call_dci_context(:update, _crud_object, *_dci_additional_params_on_update)
       end
 
@@ -44,6 +44,16 @@ module EasyDCI
         def do_render_alert_messages?
           return self.render_alert_messages unless self.render_alert_messages.is_a?(Proc)
           self.render_alert_messages.call(request)
+        end
+
+
+        def _dci_params_on_create
+          _crud_model.params(:on_create)
+        end
+
+
+        def _dci_params_on_update
+          _crud_model.params(:on_update)
         end
 
 
