@@ -56,9 +56,20 @@ module EasyDCI
 
 
         def render_dci_success(template, locals = {}, opts = {})
-          partial = opts.delete(:render_partial) { false }
-          nothing = opts.delete(:render_nothing) { false }
-          layout  = opts.delete(:layout) { current_layout }
+          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_success))
+        end
+
+
+        def render_dci_failure(template, locals = {}, opts = {})
+          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_failure, render_partial: true))
+        end
+
+
+        def dci_response(template, locals = {}, opts = {})
+          partial      = opts.delete(:render_partial) { false }
+          nothing      = opts.delete(:render_nothing) { false }
+          layout       = opts.delete(:layout) { current_layout }
+          redirect_url = opts.delete(:redirect_url)
 
           respond_to do |format|
             format.html do
@@ -83,17 +94,14 @@ module EasyDCI
         end
 
 
-        def render_dci_failure(template, locals = {}, opts = {})
-          layout = opts.delete(:layout) { current_layout }
-          respond_to do |format|
-            format.html { render template, locals: locals, layout: layout }
-            format.js   { render ajax_template_path(template), locals: locals }
-          end
+        def redirect_url_on_success
+          method = "redirect_url_on_success_#{action_name}"
+          self.respond_to?(method, true) ? self.send(method) : default_redirect_url
         end
 
 
-        def redirect_url
-          method = "redirect_url_on_#{action_name}"
+        def redirect_url_on_failure
+          method = "redirect_url_on_failure_#{action_name}"
           self.respond_to?(method, true) ? self.send(method) : default_redirect_url
         end
 
