@@ -32,6 +32,14 @@ module EasyDCI
     private
 
 
+      def call_context(context, method, object, *args)
+        klass = "#{context}Context".constantize
+        context_obj = klass.new(caller)
+        context_obj.send(method, object, *args)
+        context_obj
+      end
+
+
       def t(*args)
         caller.t(*args)
       end
