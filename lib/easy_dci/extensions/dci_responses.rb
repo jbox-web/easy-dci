@@ -56,12 +56,12 @@ module EasyDCI
 
 
         def render_dci_success(template, locals = {}, opts = {})
-          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_success))
+          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_success(locals)))
         end
 
 
         def render_dci_failure(template, locals = {}, opts = {})
-          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_failure, render_partial: true))
+          dci_response(template, locals, opts.reverse_merge(redirect_url: redirect_url_on_failure(locals), render_partial: true))
         end
 
 
@@ -94,15 +94,15 @@ module EasyDCI
         end
 
 
-        def redirect_url_on_success
+        def redirect_url_on_success(opts = {})
           method = "redirect_url_on_success_#{action_name}"
-          self.respond_to?(method, true) ? self.send(method) : default_redirect_url
+          self.respond_to?(method, true) ? self.send(method, opts) : default_redirect_url
         end
 
 
-        def redirect_url_on_failure
+        def redirect_url_on_failure(opts = {})
           method = "redirect_url_on_failure_#{action_name}"
-          self.respond_to?(method, true) ? self.send(method) : default_redirect_url
+          self.respond_to?(method, true) ? self.send(method, opts) : default_redirect_url
         end
 
 
